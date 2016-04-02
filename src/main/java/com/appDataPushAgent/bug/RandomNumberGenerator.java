@@ -3,6 +3,7 @@
  */
 package com.appDataPushAgent.bug;
 
+import com.datatorrent.api.AutoMetric;
 import com.datatorrent.api.DefaultOutputPort;
 import com.datatorrent.api.InputOperator;
 import com.datatorrent.common.util.BaseOperator;
@@ -14,6 +15,8 @@ public class RandomNumberGenerator extends BaseOperator implements InputOperator
 {
   private int numTuples = 100;
   private transient int count = 0;
+  @AutoMetric
+  private long totalTuples = 0L;
 
   public final transient DefaultOutputPort<Double> out = new DefaultOutputPort<Double>();
 
@@ -27,6 +30,7 @@ public class RandomNumberGenerator extends BaseOperator implements InputOperator
   public void emitTuples()
   {
     if (count++ < numTuples) {
+      totalTuples++;
       out.emit(Math.random());
     }
   }
